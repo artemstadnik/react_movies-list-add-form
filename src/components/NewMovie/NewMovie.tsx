@@ -8,54 +8,30 @@ type Props = {
 
 export const NewMovie: React.FC<Props> = ({ onAdd }) => {
   // Increase the count after successful form submission
-  // to reset touched status of all the `Field's
-
+  // to reset touched status of all the Field's
   const [count, setCount] = useState(0);
-
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [imgUrl, setImgUrl] = useState('');
   const [imdbUrl, setImdbUrl] = useState('');
   const [imdbId, setImdbId] = useState('');
 
-  const handleTitleChange = (newValue: string) => {
-    setTitle(newValue);
-  };
-
-  const handleDescriptionChange = (newValue: string) => {
-    setDescription(newValue);
-  };
-
-  const handleImgUrlChange = (newValue: string) => {
-    setImgUrl(newValue);
-  };
-
-  const handleImdbUrlChange = (newValue: string) => {
-    setImdbUrl(newValue);
-  };
-
-  const handleImdbIdChange = (newValue: string) => {
-    setImdbId(newValue);
-  };
-
-  const isFormValid: boolean =
-    title.trim() !== '' &&
-    imgUrl.trim() !== '' &&
-    imdbUrl.trim() !== '' &&
-    imdbId.trim() !== '';
+  // Validate with trimmed values to prevent whitespace-only inputs
+  const disableButton =
+    !title.trim() || !imgUrl.trim() || !imdbUrl.trim() || !imdbId.trim();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    const movie: Movie = {
-      title,
-      description,
-      imgUrl,
-      imdbUrl,
-      imdbId,
+    const newMovie: Movie = {
+      title: title,
+      description: description,
+      imgUrl: imgUrl,
+      imdbUrl: imdbUrl,
+      imdbId: imdbId,
     };
 
-    onAdd(movie);
+    onAdd(newMovie);
 
     setTitle('');
     setDescription('');
@@ -63,7 +39,8 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
     setImdbUrl('');
     setImdbId('');
 
-    setCount(prev => prev + 1);
+    // Fixed: using descriptive variable name instead of 'x'
+    setCount(prevCount => prevCount + 1);
   };
 
   return (
@@ -74,39 +51,39 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
         name="title"
         label="Title"
         value={title}
-        onChange={handleTitleChange}
-        required={true}
+        onChange={setTitle}
+        required
       />
 
       <TextField
         name="description"
         label="Description"
         value={description}
-        onChange={handleDescriptionChange}
+        onChange={setDescription}
       />
 
       <TextField
         name="imgUrl"
         label="Image URL"
         value={imgUrl}
-        onChange={handleImgUrlChange}
-        required={true}
+        onChange={setImgUrl}
+        required
       />
 
       <TextField
         name="imdbUrl"
         label="Imdb URL"
         value={imdbUrl}
-        onChange={handleImdbUrlChange}
-        required={true}
+        onChange={setImdbUrl}
+        required
       />
 
       <TextField
         name="imdbId"
         label="Imdb ID"
         value={imdbId}
-        onChange={handleImdbIdChange}
-        required={true}
+        onChange={setImdbId}
+        required
       />
 
       <div className="field is-grouped">
@@ -115,7 +92,7 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
             type="submit"
             data-cy="submit-button"
             className="button is-link"
-            disabled={!isFormValid}
+            disabled={disableButton}
           >
             Add
           </button>
