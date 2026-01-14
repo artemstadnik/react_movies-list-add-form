@@ -44,8 +44,8 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
     imdbUrl.trim() !== '' &&
     imdbId.trim() !== '';
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
 
     const movie: Movie = {
       title,
